@@ -11,7 +11,7 @@ from datasets import Dataset
 from datasets import load_dataset
 
 model_type = "xlmroberta"
-model_name = "FacebookAI/xlm-roberta-large"
+model_name = "FacebookAI/xlm-roberta-base"
 
 train = Dataset.to_pandas(load_dataset('sinhala-nlp/NSINA-Media', split='train'))
 test = Dataset.to_pandas(load_dataset('sinhala-nlp/NSINA-Media', split='test'))
