@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import torch
+import os
 
 from experiments.label_encoder import encode, decode
 from transformer_model.evaluation import macro_f1, weighted_f1, print_stat
