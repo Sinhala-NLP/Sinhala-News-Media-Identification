@@ -34,7 +34,7 @@ model_args.model_name = model_name
 model_args.num_train_epochs = 5
 model_args.overwrite_output_dir = True
 model_args.save_steps = 1000
-model_args.train_batch_size = 8
+model_args.train_batch_size = 16
 model_args.wandb_project = "NSINa_media_identification"
 model_args.regression = False
 
