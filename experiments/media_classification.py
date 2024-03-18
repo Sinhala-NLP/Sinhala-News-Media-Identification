@@ -7,33 +7,20 @@ from transformer_model.evaluation import macro_f1, weighted_f1, print_stat
 from transformer_model.model_args import ClassificationArgs
 from transformer_model.run_model import ClassificationModel
 
+model_type = "roberta"
+model_name = "NLPC-UOM/SinBERT-large"
 
-full = pd.read_json("NSINa.json")
+train = Dataset.to_pandas(load_dataset('sinhala-nlp/NSINA-Media', split='train'))
+test = Dataset.to_pandas(load_dataset('sinhala-nlp/NSINA-Media', split='test'))
 
-# Number of samples to take from each category
-sample_size = 10000
+train = train.rename(columns={'News Content': 'text', 'Source': 'labels'}).dropna()
+train['labels'] = encode(train["labels"])
 
-
-# Define a function to sub-sample from each category
-def sub_sample(group):
-    return group.sample(min(len(group), sample_size))
-
-
-# Group the DataFrame by 'Category' and apply the sub-sampling function
-subsampled_df = full.groupby('Source', group_keys=False).apply(sub_sample)
-
-# Reset the index of the resulting DataFrame
-subsampled_df = subsampled_df.reset_index(drop=True)
-
-subsampled_df = subsampled_df.rename(columns={'News Content': 'text', 'Source': 'labels'}).dropna()
-
-subsampled_df = subsampled_df[["text", "labels"]]
-subsampled_df['labels'] = encode(subsampled_df["labels"])
-
-train, test = train_test_split(subsampled_df, test_size=0.2)
+test = test.rename(columns={'News Content': 'text', 'Source': 'labels'}).dropna()
+test['labels'] = encode(test["labels"])
 
 model_args = ClassificationArgs()
-model_args.best_model_dir = "media_classification_outputs/sinbert/best_model"
+
 model_args.eval_batch_size = 16
 model_args.evaluate_during_training = True
 model_args.evaluate_during_training_steps = 1000
@@ -42,15 +29,20 @@ model_args.logging_steps = 1000
 model_args.learning_rate = 2e-5
 model_args.manual_seed = 777
 model_args.max_seq_length = 256
-model_args.model_type = "roberta"
-model_args.model_name = "NLPC-UOM/SinBERT-large"
+model_args.model_type = model_type
+model_args.model_name = model_name
 model_args.num_train_epochs = 5
-model_args.output_dir = "media_classification_outputs/sinbert/"
 model_args.overwrite_output_dir = True
 model_args.save_steps = 1000
 model_args.train_batch_size = 8
-model_args.wandb_project = "NSINa_media_classification"
+model_args.wandb_project = "NSINa_media_identification"
 model_args.regression = False
+
+processed_model_name = model_name.split("/")[1]
+
+model_args.output_dir = os.path.join("outputs", processed_model_name)
+model_args.best_model_dir = os.path.join("outputs", processed_model_name, "best_model")
+model_args.cache_dir = os.path.join("cache_dir", processed_model_name)
 
 
 model = ClassificationModel(model_args.model_type, model_args.model_name, num_labels=10, use_cuda=torch.cuda.is_available(),
