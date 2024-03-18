@@ -6,6 +6,8 @@ from experiments.label_encoder import encode, decode
 from transformer_model.evaluation import macro_f1, weighted_f1, print_stat
 from transformer_model.model_args import ClassificationArgs
 from transformer_model.run_model import ClassificationModel
+from datasets import Dataset
+from datasets import load_dataset
 
 model_type = "roberta"
 model_name = "NLPC-UOM/SinBERT-large"
