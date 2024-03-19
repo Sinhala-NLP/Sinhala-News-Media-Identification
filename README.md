@@ -1,11 +1,11 @@
 ***<span style="font-size: 3em;">:warning:</span>You must agree to the [license](https://github.com/Sinhala-NLP/NSINA?tab=License-1-ov-file#readme) and terms of use before using the dataset in this repo.***
 
 # Sinhala News Media Identification
-This is a text classification task created with the [NSINA dataset](https://github.com/Sinhala-NLP/NSINA). This dataset is also released with the same license as NSINA. 
-
+This is a text classification task created with the [NSINA dataset](https://github.com/Sinhala-NLP/NSINA). This dataset is also released with the same license as NSINA. The task is identifying news media given the news content.
 
 
 ## Data
+We only used 10,000 instances in NSINA 1.0 from each news source. For the two sources that had less than 10,000 instances ("Dinamina" and "Siyatha") we used the original number of instances they contained. We divided this dataset into a training and test set following a 0.8 split.  
 Data can be loaded into pandas dataframes using the following code. 
 
 ```python
